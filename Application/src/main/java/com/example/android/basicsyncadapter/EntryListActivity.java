@@ -16,7 +16,7 @@ public class EntryListActivity extends FragmentActivity {
 
     GoogleCloudMessaging gcm;
 		String regId;
-		private final String PROJECT_NUMBER = "444961801699";
+		private final String PROJECT_NUMBER = "INSERT PROJECT NUMBER";
 
 
     @Override
