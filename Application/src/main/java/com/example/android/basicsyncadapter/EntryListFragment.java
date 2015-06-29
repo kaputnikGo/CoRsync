@@ -285,10 +285,17 @@ public class EntryListFragment extends ListFragment
         }
 
         Log.i(TAG, "Opening URL: " + articleUrlString);
+        // new method of using a webView within the app to view the selected article
+				Uri articleURL = Uri.parse(articleUrlString);
+				((EntryListActivity)getActivity()).loadSelectedArticle(articleUrlString);
+
+
+				/*
         // Get a Uri object for the URL string
         Uri articleURL = Uri.parse(articleUrlString);
         Intent i = new Intent(Intent.ACTION_VIEW, articleURL);
         startActivity(i);
+        */
     }
 
     /**

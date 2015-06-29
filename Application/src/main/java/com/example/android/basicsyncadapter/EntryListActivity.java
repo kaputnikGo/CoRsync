@@ -4,6 +4,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
@@ -16,8 +19,9 @@ public class EntryListActivity extends FragmentActivity {
 
     GoogleCloudMessaging gcm;
 		String regId;
-		private final String PROJECT_NUMBER = "INSERT PROJECT NUMBER";
+		private final String PROJECT_NUMBER = "444961801699";
 
+		private WebView webView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +30,15 @@ public class EntryListActivity extends FragmentActivity {
 				getRegId();
 
 				setContentView(R.layout.activity_entry_list);
+
+				// enable contained webview for viewing articles listed in main activity
+				webView = (WebView) findViewById(R.id.activity_main_webview);
+				// custom webViewClient that views all coradviser.com.au site within this app,
+				// external urls will still invoke the client-side browser
+				webView.setWebViewClient(new corWebViewClient());
+
+				WebSettings webSettings = webView.getSettings();
+				webSettings.setJavaScriptEnabled(true); //enable javascript (default is off)
     }
 
 	public void getRegId() {
@@ -53,8 +66,31 @@ public class EntryListActivity extends FragmentActivity {
 		}.execute(null, null, null);
 	}
 
-		@Override
-		public void onDestroy() {
-			super.onDestroy();
+	public void loadSelectedArticle(String articleUrlString) {
+		if (articleUrlString == null) {
+			//go away
+			return;
 		}
+		else {
+			// have a string
+			webView.loadUrl(articleUrlString);
+		}
+	}
+
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		// check for BACK button and a history
+		if ((keyCode == KeyEvent.KEYCODE_BACK) && webView.canGoBack()) {
+			webView.goBack();
+			return true;
+		}
+		// if no, default to sys behaviour
+		return super.onKeyDown(keyCode, event);
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+	}
 }
